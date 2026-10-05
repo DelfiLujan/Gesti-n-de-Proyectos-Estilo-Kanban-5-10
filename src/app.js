@@ -16,8 +16,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Rutas base (se agregarán en Fase 3)
-// app.use('/api/boards', ...);
+const boardRoutes = require('./routes/board.routes');
+
+// Rutas base de la API
+app.use('/api/boards', boardRoutes);
 
 // Manejo de rutas inexistentes (404)
 app.use(notFound);
