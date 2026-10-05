@@ -1,0 +1,739 @@
+{
+  "info": {
+    "name": "API Kanban",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Crear tablero sin name (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Crear tablero (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Save boardId\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"boardId\", jsonData._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Tablero de Prueba\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Crear Otro tablero para aislamiento (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Save otherBoardId\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"otherBoardId\", jsonData._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Tablero Secundario\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. GET con boardId mal formado (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/boards/abc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "abc"
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. GET con boardId válido inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/boards/64b7f0a2c9e77a0012345678",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "64b7f0a2c9e77a0012345678"
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. GET tablero existente (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Crear columna en tablero inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"To Do\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/64b7f0a2c9e77a0012345678/columns",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "64b7f0a2c9e77a0012345678",
+            "columns"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Crear columna (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Save columnId\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"columnId\", jsonData._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"To Do\",\n  \"order\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns"
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Crear columna en Otro Tablero (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Save otherColumnId\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"otherColumnId\", jsonData._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Done\",\n  \"order\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{otherBoardId}}/columns",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{otherBoardId}}",
+            "columns"
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. Crear ticket sin title (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"Sin titulo\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{columnId}}",
+            "tickets"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11. Crear ticket en columna inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Ticket para 404\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/64b7f0a2c9e77a0012345678/tickets",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "64b7f0a2c9e77a0012345678",
+            "tickets"
+          ]
+        }
+      }
+    },
+    {
+      "name": "12. Acceder a boards/A/columns/{columna de B}/tickets (404 Aislamiento)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Aislamiento fallido\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{otherColumnId}}/tickets",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{otherColumnId}}",
+            "tickets"
+          ]
+        }
+      }
+    },
+    {
+      "name": "13. Crear ticket (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Save ticketId\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"ticketId\", jsonData._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Mi primer ticket\",\n  \"description\": \"Descripción detallada\",\n  \"position\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{columnId}}",
+            "tickets"
+          ]
+        }
+      }
+    },
+    {
+      "name": "14. PATCH ticket (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Titulo Actualizado\",\n  \"position\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets/{{ticketId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{columnId}}",
+            "tickets",
+            "{{ticketId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "15. PATCH ticket repetido - Idempotencia (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Titulo Actualizado\",\n  \"position\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets/{{ticketId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{columnId}}",
+            "tickets",
+            "{{ticketId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "16. PATCH mover ticket a columna de otro tablero (404/400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 or 400\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 404]);",
+              "});",
+              "pm.test(\"Response has error property\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"columnId\": \"{{otherColumnId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets/{{ticketId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{columnId}}",
+            "tickets",
+            "{{ticketId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "17. DELETE columna (204)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}",
+            "columns",
+            "{{columnId}}"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "boardId",
+      "value": ""
+    },
+    {
+      "key": "columnId",
+      "value": ""
+    },
+    {
+      "key": "ticketId",
+      "value": ""
+    },
+    {
+      "key": "otherBoardId",
+      "value": ""
+    },
+    {
+      "key": "otherColumnId",
+      "value": ""
+    }
+  ]
+}
