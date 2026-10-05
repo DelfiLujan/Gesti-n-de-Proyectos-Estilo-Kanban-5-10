@@ -5,7 +5,7 @@ const connectDB = require('./config/db');
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
-  // Conectar a la base de dato
+  // Conectar a la base de datos
   await connectDB();
   
   // Levantar el servidor

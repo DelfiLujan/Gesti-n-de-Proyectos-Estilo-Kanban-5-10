@@ -1,6 +1,4 @@
 const errorHandler = (err, req, res, next) => {
-  let error = { ...err };
-  error.message = err.message;
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Error interno del servidor';
 
@@ -29,12 +27,15 @@ const errorHandler = (err, req, res, next) => {
     message = 'JSON inválido';
   }
 
-  // Ocultar detalles internos en producción
-  if (statusCode === 500 && process.env.NODE_ENV === 'production') {
+  // Asegurar que errores inesperados 500 no filtren detalles internos al cliente
+  if (statusCode === 500 && !(err.isOperational)) {
+    if (process.env.NODE_ENV !== 'test') {
+      console.error('Unhandled Server Error:', err);
+    }
     message = 'Error interno del servidor';
   }
 
-  // Respuesta global estructurada
+  // Respuesta global estructurada: siempre { error: "mensaje" }
   res.status(statusCode).json({
     error: message
   });

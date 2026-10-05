@@ -1,0 +1,525 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "API Kanban",
+  "collectionId": "48f121d5-9856-4277-989d-7df66ef11d51",
+  "dateExported": "2026-10-05T17:00:00.000Z",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "req-1",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "1. Crear tablero sin name (400)",
+      "url": "{{baseUrl}}/boards",
+      "method": "POST",
+      "sortNum": 10000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "400"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-2",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "2. Crear tablero (201)",
+      "url": "{{baseUrl}}/boards",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"Tablero de Prueba\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "201"
+        },
+        {
+          "type": "set-env-var",
+          "custom": "json._id",
+          "action": "set-to",
+          "value": "boardId"
+        }
+      ]
+    },
+    {
+      "_id": "req-3",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "3. Crear Otro tablero para aislamiento (201)",
+      "url": "{{baseUrl}}/boards",
+      "method": "POST",
+      "sortNum": 30000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"Tablero Secundario\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "201"
+        },
+        {
+          "type": "set-env-var",
+          "custom": "json._id",
+          "action": "set-to",
+          "value": "otherBoardId"
+        }
+      ]
+    },
+    {
+      "_id": "req-4",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "4. GET con boardId mal formado (400)",
+      "url": "{{baseUrl}}/boards/abc",
+      "method": "GET",
+      "sortNum": 40000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "400"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-5",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "5. GET con boardId válido inexistente (404)",
+      "url": "{{baseUrl}}/boards/64b7f0a2c9e77a0012345678",
+      "method": "GET",
+      "sortNum": 50000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "404"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-6",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "6. GET tablero existente (200)",
+      "url": "{{baseUrl}}/boards/{{boardId}}",
+      "method": "GET",
+      "sortNum": 60000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "200"
+        },
+        {
+          "type": "json-query",
+          "custom": "json._id",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-7",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "7. Crear columna en tablero inexistente (404)",
+      "url": "{{baseUrl}}/boards/64b7f0a2c9e77a0012345678/columns",
+      "method": "POST",
+      "sortNum": 70000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"To Do\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "404"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-8",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "8. Crear columna (201)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns",
+      "method": "POST",
+      "sortNum": 80000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"To Do\",\n  \"order\": 1\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "201"
+        },
+        {
+          "type": "set-env-var",
+          "custom": "json._id",
+          "action": "set-to",
+          "value": "columnId"
+        }
+      ]
+    },
+    {
+      "_id": "req-9",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "9. Crear columna en Otro Tablero (201)",
+      "url": "{{baseUrl}}/boards/{{otherBoardId}}/columns",
+      "method": "POST",
+      "sortNum": 90000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"Done\",\n  \"order\": 1\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "201"
+        },
+        {
+          "type": "set-env-var",
+          "custom": "json._id",
+          "action": "set-to",
+          "value": "otherColumnId"
+        }
+      ]
+    },
+    {
+      "_id": "req-10",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "10. Crear ticket sin title (400)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets",
+      "method": "POST",
+      "sortNum": 100000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"description\": \"Sin titulo\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "400"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-11",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "11. Crear ticket en columna inexistente (404)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/64b7f0a2c9e77a0012345678/tickets",
+      "method": "POST",
+      "sortNum": 110000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Ticket para 404\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "404"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-12",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "12. Acceder a boards/A/columns/{columna de B}/tickets (404 Aislamiento)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{otherColumnId}}/tickets",
+      "method": "POST",
+      "sortNum": 120000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Aislamiento fallido\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "404"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-13",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "13. Crear ticket (201)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets",
+      "method": "POST",
+      "sortNum": 130000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Mi primer ticket\",\n  \"description\": \"Descripción detallada\",\n  \"position\": 0\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "201"
+        },
+        {
+          "type": "set-env-var",
+          "custom": "json._id",
+          "action": "set-to",
+          "value": "ticketId"
+        }
+      ]
+    },
+    {
+      "_id": "req-14",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "14. PATCH ticket (200)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets/{{ticketId}}",
+      "method": "PATCH",
+      "sortNum": 140000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Titulo Actualizado\",\n  \"position\": 2\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "200"
+        }
+      ]
+    },
+    {
+      "_id": "req-15",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "15. PATCH ticket repetido - Idempotencia (200)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets/{{ticketId}}",
+      "method": "PATCH",
+      "sortNum": 150000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Titulo Actualizado\",\n  \"position\": 2\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "200"
+        }
+      ]
+    },
+    {
+      "_id": "req-16",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "16. PATCH mover ticket a columna de otro tablero (404/400)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}/tickets/{{ticketId}}",
+      "method": "PATCH",
+      "sortNum": 160000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"columnId\": \"{{otherColumnId}}\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "404"
+        },
+        {
+          "type": "json-query",
+          "custom": "json.error",
+          "action": "is-not-empty",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "_id": "req-17",
+      "colId": "48f121d5-9856-4277-989d-7df66ef11d51",
+      "containerId": "",
+      "name": "17. DELETE columna (204)",
+      "url": "{{baseUrl}}/boards/{{boardId}}/columns/{{columnId}}",
+      "method": "DELETE",
+      "sortNum": 170000,
+      "created": "2026-10-05T17:00:00.000Z",
+      "modified": "2026-10-05T17:00:00.000Z",
+      "headers": [],
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "204"
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "name": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "name": "boardId",
+      "value": ""
+    },
+    {
+      "name": "otherBoardId",
+      "value": ""
+    },
+    {
+      "name": "columnId",
+      "value": ""
+    },
+    {
+      "name": "otherColumnId",
+      "value": ""
+    },
+    {
+      "name": "ticketId",
+      "value": ""
+    }
+  ]
+}
